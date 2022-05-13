@@ -129,8 +129,8 @@ if __name__ == "__main__":
         score = 0
         # env 초기화
         state = env.reset(animal_array)
-        #state = np.reshape(state, [1, state_size])
-        state = np.reshape(1,-1)
+        state = np.reshape(state, [1, state_size])
+        #state = np.reshape(1,-1)
 
         while not done:
             if agent.render:
@@ -140,8 +140,8 @@ if __name__ == "__main__":
             action = agent.get_action(state)
             # 선택한 행동으로 환경에서 한 타임스텝 진행
             next_state, reward, done = env.step(action)
-            #next_state = np.reshape(next_state, [1, state_size])
-            next_state = np.reshape(1,-1)
+            next_state = np.reshape(next_state, [1, state_size])
+            #next_state = np.reshape(1,-1)
 
             # 타임스텝마다 보상 0.1, 에피소드가 중간에 끝나면 -1 보상
             score += reward
@@ -159,4 +159,7 @@ if __name__ == "__main__":
                 # 각 에피소드마다 타깃 모델을 모델의 가중치로 업데이트
                 agent.update_target_model()
                 # 에피소드마다 학습 결과 출력
-                print(score)
+                #print("episode ", e , " : ",score)
+                score_avg = 0.9 * score_avg + 0.1 * score if score_avg != 0 else score
+                print("episode: {:3d} | score avg: {:3.2f} | memory length: {:4d} | epsilon: {:.4f}".format(
+                    e, score_avg, len(agent.memory), agent.epsilon))
