@@ -140,12 +140,12 @@ class EcoSystemEnv(gym.Env[np.ndarray, Union[int, np.ndarray]]):
         if sim_tick >= 0:
             print("sim_tick",sim_tick,done)
 
-        if sim_tick > 0:
-            reward = 10
-        elif not done:  #멸종이 아니다
+        if not done:  #멸종이 아니다
             reward = 1
+        elif sim_tick > 0:
+            reward = 10
         else:
-            reward = -10
+            reward = -1
 
         return np.array(self.state, dtype=np.int), reward, done
 
