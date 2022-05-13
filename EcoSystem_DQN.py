@@ -145,7 +145,7 @@ if __name__ == "__main__":
 
             # 타임스텝마다 보상 0.1, 에피소드가 중간에 끝나면 -1 보상
             score += reward
-            reward = 0.1 if not done or score == 500 else -1
+            #reward = 0.1 if not done or score == 500 else -1
 
             # 리플레이 메모리에 샘플 <s, a, r, s'> 저장
             agent.append_sample(state, action, reward, next_state, done)
