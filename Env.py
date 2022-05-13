@@ -121,8 +121,8 @@ class EcoSystemEnv(gym.Env[np.ndarray, Union[int, np.ndarray]]):
         print(self.state)
         sim_tick = self.simulate()
         done = bool(
-            (sim_tick > 2) or
-            (a0 and a1 and a2
+            (sim_tick > 5) or
+            not (a0 and a1 and a2
              and a3 and a4
              and a5 and a6
              and a7 and a8 and a9) # Max 값 넘어가는 것도 설정해야함
@@ -130,7 +130,7 @@ class EcoSystemEnv(gym.Env[np.ndarray, Union[int, np.ndarray]]):
         print("sim_tick",sim_tick)
         if not done:
             reward = 1
-        elif sim_tick > 2:
+        elif sim_tick > 5:
             reward = 10
         else:
             reward = 0
