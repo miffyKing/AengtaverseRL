@@ -137,13 +137,16 @@ class EcoSystemEnv(gym.Env[np.ndarray, Union[int, np.ndarray]]):
              a8 > self.threshold[8] or a9 > self.threshold[9]
              )
         )
-        #print("sim_tick",sim_tick,done)
-        if not done:
-            reward = 1
-        elif sim_tick > 0:
+        if sim_tick >= 0:
+            print("sim_tick",sim_tick,done)
+
+        if sim_tick > 0:
             reward = 10
+        elif not done:  #멸종이 아니다
+            reward = 1
         else:
-            reward = 0
+            reward = -10
+
         return np.array(self.state, dtype=np.int), reward, done
 
     def reset(self, animal_array):
