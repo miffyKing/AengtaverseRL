@@ -64,17 +64,21 @@ class EcoSystemEnv(gym.Env[np.ndarray, Union[int, np.ndarray]]):
             ],
             dtype=np.int,
         )
-
+        self.threshold = np.array([
+                5, 5, 5, 10, 10,
+                10, 10, 10, 15, 15,
+            ], dtype=np.int,)
         self.action_space = spaces.Discrete(20)  # 10 species inc/dec 0~19
         self.observation_space = spaces.Box(0, high, dtype=np.int)
         self.state = None
         self.tick = 0
 
-    def simulate(self):
-        self.tick = np.random.randint(5)
+    def simulate(self,a0, a1, a2, a3, a4, a5, a6, a7, a8, a9):
+        self.tick = a0 + a2 + a3 + a4 + a5 - a6 - a7 - a8 - a9
         return self.tick
 
     def step(self, action):
+        #print("action : ",action)
         a0, a1, a2, a3, a4, a5, a6, a7, a8, a9 = self.state
         if action == 0:
             a0 += 1
@@ -116,21 +120,27 @@ class EcoSystemEnv(gym.Env[np.ndarray, Union[int, np.ndarray]]):
             a8 -= 1
         elif action == 19:
             a9 -= 1
-
+        #print("B : ",self.state)
         self.state = (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9)
-        print(self.state)
-        sim_tick = self.simulate()
-        done = bool(
-            (sim_tick > 5) or
-            not (a0 and a1 and a2
+        #print("A : ", self.state)
+        sim_tick = self.simulate(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9)
+        done = bool( # done -> 충분한 시간이 흐름 Good / 한 종의 멸종 bad/ 한 종이 오바 bad
+            (sim_tick > 0) or
+            (not (a0 and a1 and a2
              and a3 and a4
              and a5 and a6
-             and a7 and a8 and a9) # Max 값 넘어가는 것도 설정해야함
+             and a7 and a8 and a9)) or# Max 값 넘어가는 것도 설정해야함
+            (a0 > self.threshold[0] or a1 > self.threshold[1] or
+             a2 > self.threshold[2] or a3 > self.threshold[3] or
+             a4 > self.threshold[4] or a5 > self.threshold[5] or
+             a6 > self.threshold[6] or a7 > self.threshold[7] or
+             a8 > self.threshold[8] or a9 > self.threshold[9]
+             )
         )
-        print("sim_tick",sim_tick)
+        #print("sim_tick",sim_tick,done)
         if not done:
             reward = 1
-        elif sim_tick > 5:
+        elif sim_tick > 0:
             reward = 10
         else:
             reward = 0
@@ -138,3 +148,4 @@ class EcoSystemEnv(gym.Env[np.ndarray, Union[int, np.ndarray]]):
 
     def reset(self, animal_array):
         self.state = animal_array
+        return self.state
