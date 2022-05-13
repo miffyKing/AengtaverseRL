@@ -114,9 +114,9 @@ if __name__ == "__main__":
 
             # 타임스텝마다 보상 0.1, 에피소드가 중간에 끝나면 -1 보상
             score += reward
-            reward = 0.1 if not done or score == 500 else -1
+            #reward = 0.1 if not done or score == 500 else -1
 
-            # 매 타임스텝마다 학습
+            # 매 타임 스텝마다 학습
             loss = agent.train_model(state, action, reward, next_state, done)
             loss_list.append(loss)
             state = next_state
