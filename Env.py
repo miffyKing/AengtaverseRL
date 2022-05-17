@@ -4,6 +4,7 @@ Copied from http://incompleteideas.net/sutton/book/code/pole.c
 permalink: https://perma.cc/C9ZM-652R
 """
 import math
+import simulation
 from typing import Optional, Union
 
 import numpy as np
@@ -123,7 +124,7 @@ class EcoSystemEnv(gym.Env[np.ndarray, Union[int, np.ndarray]]):
         #print("B : ",self.state)
         self.state = (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9)
         #print("A : ", self.state)
-        sim_tick = self.simulate(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9)
+        sim_tick = simulate(np.array(self.state, dtype=np.int))
         done = bool( # done -> 충분한 시간이 흐름 Good / 한 종의 멸종 bad/ 한 종이 오바 bad
             (sim_tick > 0) or
             (not (a0 and a1 and a2
