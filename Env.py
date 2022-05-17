@@ -1,8 +1,3 @@
-"""
-Classic cart-pole system implemented by Rich Sutton et al.
-Copied from http://incompleteideas.net/sutton/book/code/pole.c
-permalink: https://perma.cc/C9ZM-652R
-"""
 import math
 import simulation
 from typing import Optional, Union
@@ -74,10 +69,6 @@ class EcoSystemEnv(gym.Env[np.ndarray, Union[int, np.ndarray]]):
         self.state = None
         self.tick = 0
 
-    def simulate(self,a0, a1, a2, a3, a4, a5, a6, a7, a8, a9):
-        self.tick = a0 + a2 + a3 + a4 + a5 - a6 - a7 - a8 - a9
-        return self.tick
-
     def step(self, action):
         #print("action : ",action)
         a0, a1, a2, a3, a4, a5, a6, a7, a8, a9 = self.state
@@ -124,7 +115,7 @@ class EcoSystemEnv(gym.Env[np.ndarray, Union[int, np.ndarray]]):
         #print("B : ",self.state)
         self.state = (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9)
         #print("A : ", self.state)
-        sim_tick = simulate(np.array(self.state, dtype=np.int))
+        sim_tick = simulation.simulate(np.array(self.state, dtype=np.int))
         done = bool( # done -> 충분한 시간이 흐름 Good / 한 종의 멸종 bad/ 한 종이 오바 bad
             (sim_tick > 0) or
             (not (a0 and a1 and a2
