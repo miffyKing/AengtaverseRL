@@ -141,12 +141,21 @@ class EcoSystemEnv(gym.Env[np.ndarray, Union[int, np.ndarray]]):
         if sim_tick >= 0:
             print("sim_tick",sim_tick,done)
 
+<<<<<<< Updated upstream
         if not done:  #생태계 : 초기값이 범위 내 #임의의 식 학습 : 범위 안에 있지만 tick 이 0을 못넘겼다
             reward = 0 #simulation 이면 sim_tick 줘도 될듯
         elif sim_tick > 0:
             reward = sim_tick * 10 # 이거는 진짜 잘한거니깐 sim_tick * 5 줘도 될듯?
         else:
             reward = -100
+=======
+        if not done:  #초기값으로 돌렸는데 뭐가 기준시간을 못 버티고 멸종했어
+            reward = 0
+        elif sim_tick > 0: # 좋은 경우(버팀)
+            reward = 10
+        else: # 초기값이 병신
+            reward = -1000
+>>>>>>> Stashed changes
 
         return np.array(self.state, dtype=np.int), reward, done
 
