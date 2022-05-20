@@ -1,13 +1,8 @@
 import Env
-import gym
-import sys
 import random
 import numpy as np
-import matplotlib.pyplot as plt
 from collections import deque
 import tensorflow as tf
-import pylab
-from keras.models import Sequential
 from keras.layers import Dense
 from keras.initializers.initializers_v2 import RandomUniform
 from keras.optimizer_v2.adam import Adam

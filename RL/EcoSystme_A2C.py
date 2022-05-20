@@ -1,16 +1,13 @@
-import gym
-import sys
 import Env
-import random
 import numpy as np
-import pylab
-import matplotlib.pyplot as plt
-from collections import deque
 import tensorflow as tf
-from keras.models import Sequential
 from keras.layers import Dense
 from keras.initializers.initializers_v2 import RandomUniform
 from keras.optimizer_v2.adam import Adam
+
+import sys, os
+sys.path.append("C:\\Users\\kenny\\PycharmProjects\\CartpoleDQN\\SIMULATION")
+from SIMULATION import simulation
 
 class A2C(tf.keras.Model):
     def __init__(self, action_size):
@@ -47,7 +44,7 @@ class A2CAgent:
         # 정책신경망과 가치신경망 생성
         self.model = A2C(self.action_size)
         # 최적화 알고리즘 설정, 미분값이 너무 커지는 현상을 막기 위해 clipnorm 설정
-        self.optimizer = Adam(lr=self.learning_rate, clipnorm=5.0)
+        self.optimizer = Adam(learning_rate=self.learning_rate, clipnorm=5.0)
 
     # 정책신경망의 출력을 받아 확률적으로 행동을 선택
     def get_action(self, state):
@@ -95,8 +92,9 @@ if __name__ == "__main__":
 
     scores, episodes = [], []
     score_avg = 0
-    animal_array = [2, 2, 2, 5, 5, 5, 5, 5, 7, 7]
+    animal_array = [20, 50, 2, 5, 1000, 5, 5, 5, 7, 7]
     num_episode = 1000
+    simulation.init_simul()
     for e in range(num_episode):
         done = False
         score = 0
@@ -120,9 +118,11 @@ if __name__ == "__main__":
             loss = agent.train_model(state, action, reward, next_state, done)
             loss_list.append(loss)
             state = next_state
-
+            print("Episode", e, "Simulate with new state : ", state[0][0], state[0][1], state[0][4])
             if done:
                 # 에피소드마다 학습 결과 출력
+                if score != -1000:
+                    print("Desired Ecosystem's Animal Number : ",state[0][0],state[0][1],state[0][4])
                 score_avg = 0.9 * score_avg + 0.1 * score if score_avg != 0 else score
                 print("episode: {:3d} | score avg: {:3.2f} | loss: {:.3f}".format(
                       e, score_avg, np.mean(loss_list)))
